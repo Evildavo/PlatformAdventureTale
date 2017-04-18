@@ -11,6 +11,7 @@ public class MainCharacter : MonoBehaviour
     Animator animator;
     Rigidbody2D ourRigidBody;
     float jumpForceApplied;
+    bool resettingJumpDelay = false;
 
     [SerializeField]
     [Tooltip("The force of walking left or right")]
@@ -23,6 +24,10 @@ public class MainCharacter : MonoBehaviour
     [SerializeField]
     [Tooltip("Maximum force that can be applied to a single jump")]
     float maxJumpForce = 1f;
+
+    [SerializeField]
+    [Tooltip("Cooloff time in seconds before the player can jump again")]
+    float jumpCooloff = 0f;
 
 	void Start ()
     {
@@ -71,11 +76,21 @@ public class MainCharacter : MonoBehaviour
         }
 
 
-        // If we're standing somewhere reset jump ability.
-        if (ourRigidBody.velocity.y == 0f)
+        // If we're standing somewhere reset jump ability, after a cooloff time.
+        if (!resettingJumpDelay && ourRigidBody.velocity.y == 0f)
         {
-            jumpForceApplied = 0f;
+            resettingJumpDelay = true;
+            StartCoroutine(ResetJumpAfterDelay(jumpCooloff));
         }
+    }
+
+    // Coroutine for resetting player jump ability after a delay.
+    IEnumerator ResetJumpAfterDelay(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+
+        jumpForceApplied = 0f;
+        resettingJumpDelay = false;
     }
 
 }
