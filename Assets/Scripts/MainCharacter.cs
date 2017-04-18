@@ -25,7 +25,7 @@ public class MainCharacter : MonoBehaviour
         ourRigidBody = GetComponent<Rigidbody2D>();
     }
 	
-	void Update ()
+	void FixedUpdate ()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
