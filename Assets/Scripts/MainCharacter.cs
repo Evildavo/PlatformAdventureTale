@@ -12,6 +12,8 @@ public class MainCharacter : MonoBehaviour
     Rigidbody2D ourRigidBody;
     float jumpForceApplied;
     bool resettingJumpDelay = false;
+    bool isFacingLeft = false;
+    bool isWalking = false;
 
     [SerializeField]
     [Tooltip("The force of walking left or right")]
@@ -29,6 +31,28 @@ public class MainCharacter : MonoBehaviour
     [Tooltip("Cooloff time in seconds before the player can jump again")]
     float jumpCooloff = 0f;
 
+    // True if facing left, false if facing right.
+    bool IsFacingLeft
+    {
+        get { return isFacingLeft; }
+        set
+        {
+            isFacingLeft = value;
+            animator.SetBool("IsFacingLeft", value);
+        }
+    }
+
+    // True if the character is walking either left or right.
+    bool IsWalking
+    {
+        get { return isWalking; }
+        set
+        {
+            isWalking = value;
+            animator.SetBool("IsWalking", value);
+        }
+    }
+
 	void Start ()
     {
         animator = GetComponent<Animator>();
@@ -43,23 +67,23 @@ public class MainCharacter : MonoBehaviour
         // Walk right.
         if (Input.GetAxis("Horizontal") > 0f)
         {
-            animator.SetBool("IsFacingLeft", false);
-            animator.SetBool("IsWalking", true);
+            IsFacingLeft = false;
+            IsWalking = true;
             ourRigidBody.AddForce(Vector2.right * walkForce);
         }
 
         // Walk left.
         else if (Input.GetAxis("Horizontal") < 0f)
         {
-            animator.SetBool("IsFacingLeft", true);
-            animator.SetBool("IsWalking", true);
+            IsFacingLeft = true;
+            IsWalking = true;
             ourRigidBody.AddForce(Vector2.left * walkForce);
         }
 
         // Stand
         else
         {
-            animator.SetBool("IsWalking", false);
+            IsWalking = false;
             //ourRigidBody.velocity = Vector2.zero; // Stop abruptly.
         }
 
