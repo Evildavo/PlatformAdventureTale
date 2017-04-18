@@ -63,10 +63,11 @@ public class MainCharacter : MonoBehaviour
         // Jump.
         if (verticalInput > 0f)
         {
-            // Apply jump force, up to the maximum.
+            // Apply jump force, up to the maximum smoothed with a cosine curve.
             if (jumpForceApplied < maxJumpForce)
             {
-                ourRigidBody.AddForce(Vector2.up * jumpForce);
+                ourRigidBody.AddForce(Vector2.up * jumpForce * 
+                    Mathf.Cos(jumpForceApplied / maxJumpForce * Mathf.PI / 2f));
                 jumpForceApplied += jumpForce;
             }
         }
