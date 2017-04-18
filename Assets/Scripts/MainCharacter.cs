@@ -10,14 +10,19 @@ public class MainCharacter : MonoBehaviour
 {
     Animator animator;
     Rigidbody2D ourRigidBody;
+    float jumpForceApplied;
 
     [SerializeField]
     [Tooltip("The force of walking left or right")]
     float walkForce = 1f;
 
     [SerializeField]
-    [Tooltip("The force of jumps")]
+    [Tooltip("The force applied upwards while jumping")]
     float jumpForce = 1f;
+
+    [SerializeField]
+    [Tooltip("Maximum force that can be applied to a single jump")]
+    float maxJumpForce = 1f;
 
 	void Start ()
     {
@@ -27,6 +32,8 @@ public class MainCharacter : MonoBehaviour
 	
 	void FixedUpdate ()
     {
+        // Handle input.
+        //
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
@@ -53,10 +60,22 @@ public class MainCharacter : MonoBehaviour
             //ourRigidBody.velocity = Vector2.zero; // Stop abruptly.
         }
 
-        // Jump if we're not already moving through the air.
-        if (verticalInput > 0f /*&& ourRigidBody.velocity.y == 0f*/)
+        // Jump.
+        if (verticalInput > 0f)
         {
-            ourRigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            // Apply jump force, up to the maximum.
+            if (jumpForceApplied < maxJumpForce)
+            {
+                ourRigidBody.AddForce(Vector2.up * jumpForce);
+                jumpForceApplied += jumpForce;
+            }
+        }
+
+
+        // If we're standing somewhere reset jump ability.
+        if (ourRigidBody.velocity.y == 0f)
+        {
+            jumpForceApplied = 0f;
         }
     }
 
