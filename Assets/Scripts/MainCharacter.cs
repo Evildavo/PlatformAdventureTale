@@ -34,11 +34,9 @@ public class MainCharacter : MonoBehaviour
     {
         // Handle input.
         //
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
 
         // Walk right.
-        if (horizontalInput > 0f)
+        if (Input.GetAxis("Horizontal") > 0f)
         {
             animator.SetBool("IsFacingLeft", false);
             animator.SetBool("IsWalking", true);
@@ -46,7 +44,7 @@ public class MainCharacter : MonoBehaviour
         }
 
         // Walk left.
-        else if (horizontalInput < 0f)
+        else if (Input.GetAxis("Horizontal") < 0f)
         {
             animator.SetBool("IsFacingLeft", true);
             animator.SetBool("IsWalking", true);
@@ -61,7 +59,7 @@ public class MainCharacter : MonoBehaviour
         }
 
         // Jump.
-        if (verticalInput > 0f)
+        if (Input.GetAxis("Vertical") > 0f)
         {
             // Apply jump force, up to the maximum smoothed with a cosine curve.
             if (jumpForceApplied < maxJumpForce)
