@@ -74,9 +74,8 @@ public class MainCharacter : MonoBehaviour
                 jumpForceApplied += jumpForce;
             }
         }
-
-
-        // If we're standing somewhere reset jump ability, after a cooloff time.
+        
+        // If we're grounded reset jump ability, after a cooloff time.
         if (!resettingJumpDelay && ourRigidBody.velocity.y == 0f)
         {
             resettingJumpDelay = true;
